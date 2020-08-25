@@ -1,5 +1,5 @@
 import React from 'react'
-import { 
+import {
   majorScale,
   minorScale,
   Button,
@@ -80,8 +80,8 @@ function DatabasesView () {
         Databases
       </Heading>
     </Pane>
-    <Pane 
-      display='flex' 
+    <Pane
+      display='flex'
       flexDirection='row'
       marginX={majorScale(6)}
       marginTop={majorScale(2)}
@@ -115,15 +115,15 @@ function DatabasesView () {
         background='white'
         marginX={majorScale(6)}
       >
-        {!appState.loading.programs 
+        {!appState.loading.programs
           ? (<ProgramList
               programs={appState.programs}
               onRemove={handleRemoveDatabase}
             />)
           : (<Pane
-              display='flex' 
-              flexDirection='column' 
-              alignItems='center' 
+              display='flex'
+              flexDirection='column'
+              alignItems='center'
               marginTop={majorScale(3)}
               marginBottom={majorScale(1)}
             >

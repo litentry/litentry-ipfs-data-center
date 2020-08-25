@@ -46,14 +46,23 @@ export const getDB = async (address) => {
 
 export const addDatabase = async (address) => {
   try {
+    const prefix = '/orbitdb'
     const db = await orbitdb.open(address)
+    let dbAddress = address
+    if (address.indexOf(prefix) === -1) {
+      if (address.substring(0, 1) === '/') {
+        dbAddress = prefix + dbAddress
+      } else {
+        dbAddress = prefix + '/' + dbAddress
+      }
+    }
     return programs.add({
       name: db.dbname,
       type: db.type,
-      address: address,
+      address: dbAddress,
       added: Date.now()
     })
-  }catch (e){
+  } catch (e) {
     console.log('adding error', e)
   }
 }
