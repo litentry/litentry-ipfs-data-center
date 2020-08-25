@@ -14,13 +14,12 @@ import { actions, useStateValue } from '../state'
 function Systems () {
   const [appState, dispatch] = useStateValue()
 
-
   React.useEffect(() => {
     dispatch({ type: actions.PROGRAMS.SET_PROGRAMS_LOADING, loading: true })
 
     initIPFS().then(async (ipfs) => {
       dispatch({ type: actions.SYSTEMS.SET_IPFS, ipfsStatus: 'Started'})
-  
+
       initOrbitDB(ipfs).then(async (databases) => {
         dispatch({ type: actions.SYSTEMS.SET_ORBITDB, orbitdbStatus: 'Started' })
 
@@ -35,7 +34,7 @@ function Systems () {
 
   return (
     <Pane background='white' elevation={1}>
-      <Pane 
+      <Pane
         display='flex'
         flexDirection='column'
         alignItems='left'

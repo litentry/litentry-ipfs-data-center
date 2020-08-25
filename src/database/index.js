@@ -10,7 +10,7 @@ let programs
 
 // Start IPFS
 export const initIPFS = async () => {
-  return await IPFS.create()
+  return await IPFS.create(Config.ipfs)
 }
 
 // Start OrbitDB
@@ -45,13 +45,17 @@ export const getDB = async (address) => {
 }
 
 export const addDatabase = async (address) => {
-  const db = await orbitdb.open(address)
-  return programs.add({
-    name: db.dbname,
-    type: db.type,
-    address: address,
-    added: Date.now()
-  })
+  try {
+    const db = await orbitdb.open(address)
+    return programs.add({
+      name: db.dbname,
+      type: db.type,
+      address: address,
+      added: Date.now()
+    })
+  }catch (e){
+    console.log('adding error', e)
+  }
 }
 
 export const createDatabase = async (name, type, permissions) => {
