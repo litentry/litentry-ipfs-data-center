@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { majorScale, Heading, Pane, Spinner } from 'evergreen-ui'
 import { useLocation, Redirect } from 'react-router-dom'
-import { useStateValue, actions, loadingState } from '../state'
+import { useStateValue, loadingState } from '../state'
 
 import ProgramList from '../components/DatabaseList'
 
@@ -10,7 +10,7 @@ function useQuery () {
 }
 
 function SearchResultsView () {
-  const [appState, dispatch] = useStateValue()
+  const [appState] = useStateValue()
 
   const query = useQuery().get('q')
   const queryOk = query.length >= 2
