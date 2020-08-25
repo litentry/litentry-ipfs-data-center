@@ -18,7 +18,7 @@ function Header () {
 
   return (
     <Pane background='white' elevation={1}>
-      <Pane 
+      <Pane
         className='row-wrap'
         display='flex'
         borderBottom='default'
@@ -28,16 +28,16 @@ function Header () {
           display='flex'
           flex='1 1 60%'
         >
-          <Link 
-            href='#/' 
-            textDecoration='none' 
-            display='flex' 
-            flexDirection='row' 
+          <Link
+            href='#/'
+            textDecoration='none'
+            display='flex'
+            flexDirection='row'
             alignItems='center'
           >
-            <img src='Orbit_round-02.png' width={majorScale(5)}/>
+            <img src='litentry.png' width={majorScale(5)}/>
             <Heading size={800} fontFamily='Titillium Web' marginX={majorScale(2)}>
-            CONTROL CENTER
+            LITENTRY DATA CENTER
             </Heading>
           </Link>
         </Pane>

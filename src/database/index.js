@@ -10,19 +10,20 @@ let programs
 
 // Start IPFS
 export const initIPFS = async () => {
-  return await IPFS.create(Config.ipfs)
+  return await IPFS.create()
 }
 
 // Start OrbitDB
 export const initOrbitDB = async (ipfs) => {
   orbitdb = await OrbitDB.createInstance(ipfs)
+  console.log('generated identity is', orbitdb.identity);
   return orbitdb
 }
 
 export const getAllDatabases = async () => {
   if (!programs && orbitdb) {
     // Load programs database
-    programs = await orbitdb.feed('network.programs', {
+    programs = await orbitdb.feed('litentry', {
       accessController: { write: [orbitdb.identity.id] },
       create: true
     })
