@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   majorScale,
   minorScale,
@@ -6,7 +6,7 @@ import {
   Heading,
   Pane,
   Spinner,
-  Text
+  Text, Dialog
 } from 'evergreen-ui'
 
 import { useStateValue, actions } from '../state'
@@ -15,10 +15,11 @@ import { getAllDatabases, addDatabase, removeDatabase, createDatabase } from '..
 
 import ProgramList from '../components/DatabaseList'
 import CreateDialog from '../components/CreateDialog'
-import AddDialog from '../components/AddDialog'
+import QrReader from 'react-qr-reader'
 
 function DatabasesView () {
   const [appState, dispatch] = useStateValue()
+  const [scannerOpen, setScannerOpen] = useState(false);
 
   async function fetchDatabases () {
     dispatch({ type: actions.PROGRAMS.SET_PROGRAMS_LOADING, loading: true })
@@ -42,14 +43,31 @@ function DatabasesView () {
     })
   }
 
-  const handleAddDatabase = (args) => {
-    dispatch({ type: actions.DB.OPEN_ADDDB_DIALOG })
+  const handleScanSuccess = data => {
+    if(data) {
+      console.log('scan result is', data);
+      const [,orbitDbPrefix, ipfsAddress, dbName] = data.split('/');
+      if(orbitDbPrefix !== 'orbitdb' || ipfsAddress === undefined || dbName === undefined)
+        return;
+      addDB(data);
+      setScannerOpen(false);
+    }
+
+  }
+  const handleScanError = err => {
+    console.error(err)
   }
 
-  const addDB = (args) => {
-    console.log("Add database...", args)
-    addDatabase(args.address).then((hash) => {
-      console.log("Added", args.address)
+  const addDB = (ipfsAddressData) => {
+    console.log("Add database...", ipfsAddressData)
+    if(appState.programs.some((program)=> {
+      return program?.payload?.value?.address === ipfsAddressData;
+    })) {
+      return console.log('duplicate ipfs address, not add');
+    }
+    addDatabase(ipfsAddressData).then((hash) => {
+      console.log("Added", ipfsAddressData)
+      console.log("data hash is", hash)
       fetchDatabases().then((data) => {
         console.log("Loaded programs", data)
       })
@@ -77,7 +95,7 @@ function DatabasesView () {
         marginTop={majorScale(3)}
         marginBottom={majorScale(2)}
       >
-        Databases
+        Identities
       </Heading>
     </Pane>
     <Pane
@@ -88,26 +106,25 @@ function DatabasesView () {
       marginBottom={majorScale(1)}
     >
       <Button
+        iconBefore='plus'
+        appearance='default'
+        height={24}
+        marginLeft={minorScale(1)}
+        onClick={()=>setScannerOpen(true)}
+      >
+        Add via QR
+      </Button>
+      <Button
         iconBefore='document'
         appearance='default'
         height={24}
         onClick={handleCreateDatabase}
       >
-        Create
-      </Button>
-      <Button
-        iconBefore='plus'
-        appearance='default'
-        height={24}
-        marginLeft={minorScale(1)}
-        onClick={handleAddDatabase}
-      >
-        Open
+        Create Test DB
       </Button>
     </Pane>
     <Pane display='flex' justifyContent='center' overflow='auto'>
       <CreateDialog onCreate={createDB}/>
-      <AddDialog onAdd={addDB}/>
       <Pane
         flex='1'
         overflow='auto'
@@ -132,6 +149,20 @@ function DatabasesView () {
             </Pane>)
         }
       </Pane>
+      <Dialog
+        isShown={scannerOpen}
+        title="Dialog title"
+        onCloseComplete={() => {setScannerOpen(false)}}
+        confirmLabel="Custom Label"
+      >
+        <QrReader
+          delay={300}
+          onError={handleScanError}
+          onScan={handleScanSuccess}
+          style={{ width: '80%' }}
+        />
+        <p>Please scan the identity IPFS address QR from Litentry Authenticator</p>
+      </Dialog>
     </Pane>
     </>
   )
