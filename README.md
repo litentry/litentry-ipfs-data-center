@@ -1,17 +1,12 @@
-# Control Center
+# Litentry Data Center
 
-> UI for managing [OrbitDB](https://github.com/orbitdb/orbit-db) databases.
+> Explorer IPFS data of decentralized identity and token
 
-**Run the [Control Center](https://ipfs.io/ipfs/QmPoqRhSX2rMy6NR7Y3pnkC2z1kK9TH9fZa6wyfXLEptw9) in your browser.**
+Live site on [https://data.litentry.com/](https://data.litentry.com/)
 
-<img width="80%" src="https://raw.githubusercontent.com/orbitdb/orbit-db-control-center/master/screenshot1.png"/>
+ Litentry uses [OrbitDB](https://github.com/orbitdb/orbit-db) to implement database on IPFS, with this explorer, user may check their identity related data and tokens. 
 
-<img width="80%" src="https://raw.githubusercontent.com/orbitdb/orbit-db-control-center/master/screenshot2.png"/>
-
-Install and run from source:
-
+To build, simply
 ```shell
-git clone https://github.com/orbitdb/orbit-db-control-center.git
-cd orbit-db-control-center/
-npm i && npm start
+yarn && yarn start
 ```
